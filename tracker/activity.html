@@ -52,7 +52,7 @@
                     <label class="form-label" for="type">What type?</label>
                     <!-- TODO Create select element, use v-model to connect to the types -->
                     <select class="form-control" v-model="type">
-                        <option v-for="activityType in types">{{ activityType}}</option>
+                        <option v-for="activityType in types  ">{{ activityType}}</option>
                     </select>
                     <!-- TODO Use v-for to create option elements, one for each type -->
                 </div>
@@ -71,6 +71,16 @@
                     <!-- TODO v-model media -->
                     <input id="media2" class="form-check-input" type="radio" value="Digital" v-model="medium">
                     <label class="form-check-label" for="media2">  Digital </label>
+                </div>
+
+                <div class="form-group" >
+                    <input id="completed" type="checkbox" v-model="complete" ><label> Completed?</label>
+                </div>
+
+                <div>
+                    <label>Note:</label><br>
+                    <textarea id="comment" v-model="note"> </textarea>
+
                 </div>
 
                 <div>
@@ -102,9 +112,9 @@
                             >
                             <td>{{shortDate(record.date)}}</td>
                             <td>{{record.hours}}</td>
-                            <td v-bind:class="Drawing:record.type,
-                                panting:record.type.Panting, sketching:record.type.Sketching">
-                                {{record.type}}</td>
+                            <td > {{record.type}}</td><!--v-bind:class="Drawing:record.type,
+                                panting:record.type.Panting, sketching:record.type.Sketching"-->
+
                             <td>{{record.medium}}</td>
                         </tr>
                     </table>
@@ -143,6 +153,8 @@
 
                 types:['Sketching','Drawing','Painting'],
                 errors:[],
+                completed:false,
+                note:''
 
             }
         },
