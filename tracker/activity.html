@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="type">What type?</label>
+                    <label class="form-label" >What type?</label>
                     <!-- TODO Create select element, use v-model to connect to the types -->
                     <select class="form-control" v-model="type">
                         <option v-for="activityType in types  ">{{ activityType}}</option>
@@ -74,7 +74,8 @@
                 </div>
 
                 <div class="form-group" >
-                    <input id="completed" type="checkbox" v-model="complete" ><label> Completed?</label>
+                    <input id="completed" type="checkbox" v-model="completed" ><label> Completed?</label>
+
                 </div>
 
                 <div>
@@ -105,17 +106,20 @@
                             <th>How many hours?</th>
                             <th>Type</th>
                             <th>Media</th>
+                            <th>Completed?</th>
+                            <th>Notes</th>
                         </tr>
                         <!-- TODO use v-for to create one table row for each activity record -->
 
-                        <tr v-for="record in activityRecords"
+                        <tr v-for="record in activityRecords" v-bind:class="record.type"
                             >
                             <td>{{shortDate(record.date)}}</td>
                             <td>{{record.hours}}</td>
-                            <td > {{record.type}}</td><!--v-bind:class="Drawing:record.type,
-                                panting:record.type.Panting, sketching:record.type.Sketching"-->
-
+                            <td > {{record.type}}</td>
                             <td>{{record.medium}}</td>
+                            <td>{{completeOrProgress(record.completed)}}</td>
+                            <td>{{characterLimit(record.note)}}</td>
+
                         </tr>
                     </table>
                 </div>
@@ -129,9 +133,9 @@
             <div class="card-body">
 
                 <!-- TODO add computed property to calculate the total hours -->
-                <p>You have practiced a total of {{totalHours}}<!-- TODO display total hours --> hours</p>
+                <p>You have practiced a total of {{totalHours}}hours</p><!-- TODO display total hours -->
 
-                <!-- Challenge question! Display a list of the total hours for each type.  -->
+                <!-- Challenge question! Display a list of the total hourmm s for each type.  -->
           
             </div>
         </div>
@@ -187,6 +191,8 @@
                             hours: this.hours,
                             type: this.type,
                             medium: this.medium,
+                            completed: this.completed,
+                            note: this.note
                         }
                         this.activityRecords.push(record)
 
@@ -194,9 +200,31 @@
                             return r1.date.getTime()-r2.date.getTime()
                         })
                 }
+
             },
             shortDate(date){
                 return new Intl.DateTimeFormat('en-us',{timeZone:'UTC'}).format(date)
+            },
+            completeOrProgress(completed){
+
+                //let jobStatus=this.activityRecords.find(function (r){
+                    if (completed){
+                        return 'Completed'
+                    }else {
+                        return 'Not completed'
+                    }
+
+
+
+            },
+            characterLimit(note){
+                if(note.length>40){
+                   let ShortNote=note.substring(0,40)
+                    ShortNote=ShortNote+"..."
+                    console.log(note)
+                    return ShortNote
+
+                }
             }
         },
         computed:{
